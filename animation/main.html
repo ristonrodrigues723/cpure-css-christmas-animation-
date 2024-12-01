@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>christmas animation </title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="scene">
+        <div class="house">
+            <div class="moon"></div>
+            <div class="chimney"></div>
+            <div class="smoke"></div>
+            <div class="window"></div>
+            <div class="door"></div>
+    
+        </div>
+        <div class="tree"></div>
+        <div class="treea1"></div>
+        <div class="treea2"></div>
+        <div class="flower"></div>
+        <div class="flower1"></div>
+        <div class="flower2"></div>
+    </div>
+    <!-- <button id="speed-button">Increase Snowflake Speed</button> -->
+    <script>
+    function createSnowflakes() {
+        const scene = document.querySelector('.scene');
+        for (let i = 0; i < 50; i++) {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+
+            const size = Math.random() * 3 + 2;
+            snowflake.style.width = `${size }px`;
+            snowflake.style.height = `${size}px`;
+            snowflake.style.left = `${Math.random() * window.innerWidth}px`; 
+            snowflake.style.top = `-${Math.random() * 100}px`; 
+            snowflake.style.animationDuration = `${Math.random() * 10 + 5}s`; 
+            snowflake.style.animationDelay = `${Math.random() * 5}s`;
+
+            scene.appendChild(snowflake);
+        }
+    }
+  
+
+    function setSnowflakeSpeed(speedMultiplier) {
+    const snowflakes = document.querySelectorAll('.snowflake');
+    snowflakes.forEach((snowflake) => {
+        // Adjust the animation duration based on the speed multiplier
+        const originalDuration = parseFloat(snowflake.style.animationDuration);
+        snowflake.style.animationDuration = `${originalDuration / speedMultiplier}s`;
+    });
+}
+document.addEventListener('DOMContentLoaded', () => {
+    createSnowflakes();
+
+
+    setTimeout(() => {
+        setSnowflakeSpeed(2); // Double the speed
+    }, 3000);
+});
+
+
+
+
+    
+    createSnowflakes();
+    </script>
+</body>
+</html>
