@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>christmas animation </title>
-    <link rel="stylesheet" href="animation/styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="scene">
         <div class="house">
-            <div class="moon"></div>
+            
+<div class="moon" id="moon"></div>
             <div class="chimney"></div>
             <div class="smoke"></div>
             <div class="window"></div>
@@ -22,6 +23,16 @@
         <div class="bush"></div>
         <div class="bush1"></div>
         <div class="bush2"></div>
+    </div>
+    <div class="tree-container">
+        <div class="tree"></div>
+        <div class="treea1"></div>
+        <div class="treea2"></div>
+    </div>
+    <div class="tree-container">
+        <div class="tree"></div>
+        <div class="treea1"></div>
+        <div class="treea2"></div>
     </div>
     <div class="snowflake"></div>
     <div class="snowflake"></div>
@@ -55,6 +66,154 @@
     
 
     
-   
+    <script>
+ function createSnowflakes() {
+    const scene = document.querySelector('.scene');
+    for (let i = 0; i < 50; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        
+        const size = Math.random() * 3 + 2;
+        snowflake.style.width = `${size}px`;
+        snowflake.style.height = `${size}px`;
+        snowflake.style.left = `${Math.random() * window.innerWidth}px`;
+        
+        snowflake.style.top = `-${Math.random() * 100}px`;
+        snowflake.style.animationDuration = `${Math.random() * 10 + 5}s`;
+        snowflake.style.animationDelay = `${Math.random() * 5}s`;
+        
+        scene.appendChild(snowflake);
+         
+          snowflake.style.left = `${Math.random() * window.innerWidth}px`;
+        
+        
+        snowflake.style.top = `-${Math.random() * 100}px`;
+        
+    
+        const fallDuration = Math.random() * 10 + 5;
+        snowflake.style.animationDuration = `${fallDuration}s`;
+        
+       
+        snowflake.style.animationDelay = `${Math.random() * 5}s`;
+        
+       
+        const horizontalSway = Math.random() * 20 - 10; 
+        snowflake.style.setProperty('--horizontal-sway', `${horizontalSway}px`);
+        
+        // scene.appendChild(snowflake);the above is in effective i dont know why
+    }
+}
+
+
+
+function createMerryChristmasText() {
+    const scene = document.querySelector('.scene');
+    const merryChristmas = document.createElement('div');
+    merryChristmas.classList.add('merry-christmas');
+    merryChristmas.innerHTML = `
+        <span class="merry">Merry</span>
+        <span class="christmas">Christmas</span>
+    `;
+    scene.appendChild(merryChristmas);
+}
+
+function setSnowflakeSpeed(speedMultiplier) {
+    const snowflakes = document.querySelectorAll('.snowflake');
+    snowflakes.forEach((snowflake) => {
+        const originalDuration = parseFloat(snowflake.style.animationDuration);
+        snowflake.style.animationDuration = `${originalDuration / speedMultiplier}s`;
+    });
+}
+
+function generateRandomBalls(treeSelector, numberOfBalls) {
+    const colors = ['red', 'blue', 'yellow', 'orange', 'purple', 'pink', 'green', 'cyan'];
+    const glowColors = {
+        'red': 'rgba(255, 0, 0, 0.7)',
+        'blue': 'rgba(0, 0, 255, 0.7)',
+        'yellow': 'rgba(255, 255, 0, 0.7)',
+        'orange': 'rgba(255, 165, 0, 0.7)',
+        'purple': 'rgba(128, 0, 128, 0.7)',
+        'pink': 'rgba(255, 192, 203, 0.7)',
+        'green': 'rgba(0, 128, 0, 0.7)',
+        'cyan': 'rgba(0, 255, 255, 0.7)'
+    };
+
+    const trees = document.querySelectorAll(treeSelector);
+    trees.forEach(tree => {
+        for (let i = 0; i < numberOfBalls; i++) {
+            const ball = document.createElement('div');
+            ball.classList.add('ball');
+            const randomTop = Math.random() * 100;
+            const randomLeft = Math.random() * 100 - 50;
+            
+            ball.style.top = `${randomTop}px`;
+            ball.style.left = `${randomLeft}px`;
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            ball.style.backgroundColor = randomColor;
+            
+            ball.dataset.glowColor = glowColors[randomColor];
+            
+            ball.style.animation = 'blink 2s infinite';
+            ball.style.opacity = (Math.random() * 0.5 + 0.5).toFixed(2); 
+            
+            tree.appendChild(ball);
+        }
+    });
+}
+
+function setupNightModeToggle() {
+    const moon = document.querySelector('.moon');
+    
+    if (moon) {
+        moon.addEventListener('click', () => {
+            document.body.classList.toggle('night-mode');
+            
+            const balls = document.querySelectorAll('.ball');
+            const merryChristmas = document.querySelector('.merry-christmas');
+            
+            balls.forEach(ball => {
+                if (document.body.classList.contains('night-mode')) {
+                    ball.style.boxShadow = `0 0 20px 10px ${ball.dataset.glowColor}`;
+                    
+                  
+                    if (merryChristmas) {
+                        merryChristmas.classList.add('night-glow');
+                    }
+                } else {
+                    ball.style.boxShadow = 'none';
+                    
+                    // Remove glow
+                    if (merryChristmas) {
+                        merryChristmas.classList.remove('night-glow');
+                    }
+                }
+            });
+            
+            moon.classList.toggle('moon-active');
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    createSnowflakes();
+    createMerryChristmasText();
+    setupNightModeToggle();
+    
+    generateRandomBalls('.tree', 5);
+    generateRandomBalls('.treea1', 8);
+    generateRandomBalls('.treea2', 10);
+    
+    setTimeout(() => {
+        setSnowflakeSpeed(2); 
+    }, 3000);
+});
+
+
+
+        </script>
+        
+
+
 </body>
 </html>
+
